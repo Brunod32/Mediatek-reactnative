@@ -20,7 +20,7 @@ export default function App() {
               tabBarIcon: ({ focused, color, size }) => (
                 <View style={{ paddingTop: 5 }}>
                   <Image
-                    source={require('./assets/img/music-store.png')}
+                    source={require('./assets/img/metalBook.png')}
                     style={{ width: size*1.5, height: size*1.5 }}
                   />
                 </View>
