@@ -1,14 +1,29 @@
-import { Text, View } from 'react-native';
-import { StyleSheet } from 'react-native';
-import { Image } from 'react-native';
+import React from 'react';
+import { Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const MusicScreen = () => {
+    const navigation = useNavigation();
+
+    const handleGuitarPress = () => {
+        navigation.navigate('BandsScreen');
+    };
+
+    const handleAlbumsPress = () => {
+        navigation.navigate('AlbumsScreen');
+    };
+
     return (
-      <View style={styles.container}>
+        <View style={styles.container}>
             <Text style={styles.title}>Musique</Text>
-            <Image source={require('../assets/img/guitar.webp')} style={styles.image}/>
-            <Image source={require('../assets/img/cd.png')} style={styles.image}/>
-      </View>
+            <TouchableOpacity onPress={handleGuitarPress}>
+                <Image source={require('../assets/img/guitar.webp')} style={styles.image}/>
+            </TouchableOpacity>
+            <TouchableOpacity  onPress={handleAlbumsPress}>
+                <Image source={require('../assets/img/cd.png')} style={styles.image}/>
+            </TouchableOpacity>
+        </View>
     )
 }
 

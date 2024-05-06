@@ -8,7 +8,7 @@ const HomeScreen = () => {
             <Text style={styles.title}>Bienvenue dans la mediatek</Text>
             <Image
                 style={styles.image}
-                source={require('../assets/img/metalBook.png')}
+                source={require('../assets/img/metalBook.jpg')}
             />
         </View>
     )
