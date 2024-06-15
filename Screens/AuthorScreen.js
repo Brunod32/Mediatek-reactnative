@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Image, Text, View } from 'react-native';
-import { StyleSheet} from 'react-native';
+import { Image, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const AuthorScreen = () => {
 	const [authors, setAuthors] = useState([]);
 	const [books, setBooks] = useState({});
 	const [countries, setCountries] = useState({});
 	const [totalItems, setTotalItems] = useState(0);
+	const navigation = useNavigation();
 
 useEffect(() => {
 		const fetchDataAuthors = async () => {
@@ -21,7 +23,7 @@ useEffect(() => {
 				const responseBooks = await fetch('https://mediatek-c59c683546ca.herokuapp.com/api/books');
 				const booksData = await responseBooks.json();
 				const booksMap = booksData['hydra:member'].reduce((acc, book) => {
-					acc[book['@id']] = book.title;
+					acc[book['@id']] = { title: book.title, date: book.releasedYear };
 					return acc;
 				}, {});
 				setBooks(booksMap);
@@ -39,7 +41,11 @@ useEffect(() => {
 		};
 			
 		fetchDataAuthors();
-		}, [])
+	}, [])
+		
+	const handleBookPress = (bookId) => {
+		navigation.navigate('Les livres', { bookId });
+	};
 
 	return (
 		<View style={styles.container}>
@@ -48,14 +54,17 @@ useEffect(() => {
 				authors.map((author) => (
 					<View style={styles.authorsView} key={author.id}>
 						<Text style={styles.authorTitle} >{author.firstname} {author.lastname}</Text>
-						<Image source={{ uri: author.picture }} style={{ width: 200, height: 250 }} />
+						<Image source={{ uri: author.picture }} style={styles.image} />
 						<Text style={styles.authorInfos}>{countries[author.country]}</Text>
 						<Text style={styles.authorInfos}>Bibliographie :</Text>
-						<View>
-							{author.books.map(bookId => (
-								<Text key={bookId} style={styles.authorInfos}>{books[bookId]}</Text>
-							))}
-						</View>
+						{books[author.books] && books[author.books].date && (
+                        <TouchableOpacity onPress={() => handleBookPress(author.books)}>
+                            <View style={styles.bookLinkContainer}>
+                                <Text style={styles.authorLinks}>{books[author.books].title}</Text>
+                                <Text style={styles.authorInfos}> , {books[author.books].date}</Text>   
+                            </View>
+                        </TouchableOpacity>
+                        )}
 					</View>
 				))
 			) : (
@@ -66,32 +75,45 @@ useEffect(() => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-      alignItems: 'center',
-      backgroundColor: '#3c4043',
-  },
-  name: {
-      fontSize: 30,
-      fontWeight: 'bold',
-      marginTop: 50,
-      marginBottom: 25,
-      color: 'red',
-  },
-  authorsView: {
-      flex: 1,
-      alignItems: 'center',
-  },
-  authorTitle: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      marginBottom: 15,
-      color: 'red',
-  },
-  authorInfos: {
-      color: 'white',
-      fontSize: 16,
-  }
+	container: {
+		flex: 1,
+		alignItems: 'center',
+		backgroundColor: '#3c4043',
+	},
+	name: {
+		fontSize: 30,
+		fontWeight: 'bold',
+		marginTop: 50,
+		marginBottom: 25,
+		color: 'red',
+	},
+	authorsView: {
+		flex: 1,
+		alignItems: 'center',
+	},
+	authorTitle: {
+		fontSize: 24,
+		fontWeight: 'bold',
+		marginBottom: 15,
+		color: 'red',
+	},
+	authorInfos: {
+		color: 'white',
+		fontSize: 16,
+	},
+	authorLinks: {
+        color: 'red',
+        fontSize: 16,
+    },
+    bookLinkContainer: {
+        flexDirection: 'row',
+	},
+	image: {
+		marginBottom: 15,
+		height: 200,
+        width: 200,
+        objectFit: 'contain',
+	}
 })
 
 export default AuthorScreen;

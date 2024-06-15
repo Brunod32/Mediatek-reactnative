@@ -19,10 +19,10 @@ const BooksScreen = () => {
             <Text style={styles.title}>Bibliothèque</Text>
 
             <TouchableOpacity onPress={handleAuthorPress}>
-                <Image source={require('../assets/img/writer.webp')} style={styles.image}/>
+                <Image source={require('../assets/img/writer.webp')} style={styles.imageWriter}/>
             </TouchableOpacity>
             <TouchableOpacity  onPress={handleBooksPress}>
-                <Image source={require('../assets/img/book.webp')} style={styles.image}/>
+                <Image source={require('../assets/img/book.webp')} style={styles.imageBook}/>
             </TouchableOpacity>
 
 
@@ -35,18 +35,27 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        marginTop: 50,
+        paddingTop: 50,
+        backgroundColor: '#3c4043',
     },
     title: {
-        fontSize: 30,
+        fontSize: 36,
         fontWeight: 'bold',
     },
-    image: {
+    imageWriter: {
         height: 200,
         width: 200,
         objectFit: 'contain',
-        marginTop: 50
-    }
+        marginTop: 50,
+        backgroundColor: '#cacaca',
+        borderRadius: 25,
+    },
+    imageBook: {
+        height: 200,
+        width: 200,
+        objectFit: 'contain',
+        marginTop: 50,
+    },
 })
 
 export default BooksScreen;

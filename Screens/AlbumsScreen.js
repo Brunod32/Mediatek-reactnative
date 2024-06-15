@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Image , Text, View } from 'react-native';
-import { StyleSheet} from 'react-native';
+import { Image , Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const AlbumsScreen = () => {
 	const [albums, setAlbums] = useState([]);
     const [totalItems, setTotalItems] = useState(0);
     const [bands, setBands] = useState({});
+    const navigation = useNavigation();
 
 	useEffect(() => {
         const fetchDataAlbums = async () => {
@@ -32,7 +34,11 @@ const AlbumsScreen = () => {
         };
             
         fetchDataAlbums();
-        }, [])
+    }, [])
+    
+    const handleBandPress = (bandId) => {
+        navigation.navigate('Les groupes', { bandId });
+    };
 
     return (
         <View style={styles.container}>
@@ -41,9 +47,11 @@ const AlbumsScreen = () => {
                 albums.map((album) => (
                     <View style={styles.albumsView} key={album.id}>
                         <Text style={styles.albumTitle} >{album.title}</Text>
-                        <Image source={{ uri: album.albumCover }} style={{ width: 200, height: 100 }} />
+                        <Image source={{ uri: album.albumCover }} style={styles.image} />
                         <Text style={[styles.albumInfos]}>{album.releasedYear}</Text>
-                        <Text style={styles.albumInfos}>{bands[album.band]}</Text>
+                        <TouchableOpacity onPress={() => handleBandPress(album.band)}>
+                            <Text style={styles.albumLinks}>{bands[album.band]}</Text>
+                        </TouchableOpacity>
                     </View>
                 ))
             ) : (
@@ -79,7 +87,18 @@ const styles = StyleSheet.create({
     albumInfos: {
         color: 'white',
         fontSize: 16,
-    }
+        marginTop: 15,
+    },
+    albumLinks: {
+        color: 'red',
+        fontSize: 16,
+    },
+	image: {
+		marginBottom: 15,
+		height: 200,
+        width: 200,
+        objectFit: 'contain',
+	}
 })
 
 export default AlbumsScreen;

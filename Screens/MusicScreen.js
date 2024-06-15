@@ -31,10 +31,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        marginTop: 50,
+        paddingTop: 50,
+        backgroundColor: '#3c4043',
     },
     title: {
-        fontSize: 30,
+        fontSize: 36,
         fontWeight: 'bold',
     },
     image: {

@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Image, Text, View } from 'react-native';
-import { StyleSheet} from 'react-native';
+import { Image, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const BandsScreen = () => {
     const [bands, setBands] = useState([]);  
     const [totalItems, setTotalItems] = useState(0);  
     const [countries, setCountries] = useState({});
     const [albums, setAlbums] = useState({});
+    const navigation = useNavigation();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -63,7 +65,11 @@ const BandsScreen = () => {
             fetchData();
             fetchCountries();
             fetchAlbums();
-        }, []);
+    }, []);
+    
+    const handleAlbumPress = (albumId) => {
+        navigation.navigate('CDthèque', { albumId });
+    };
 
     return (
         <View style={styles.container}>
@@ -77,9 +83,12 @@ const BandsScreen = () => {
                         <Text style={styles.bandInfos} >{countries[band.country]}, {band.creationYear}</Text>
                         <Text style={styles.bandInfos}>Discographie :</Text>
                         {albums[band.albums] && albums[band.albums].date && (
-                            <Text style={styles.bandInfos}>
-                                {albums[band.albums].title}, {albums[band.albums].date}
-                            </Text>
+                        <TouchableOpacity onPress={() => handleAlbumPress(band.albums)}>
+                            <View style={styles.albumLinkContainer}>
+                                <Text style={styles.bandLinks}>{albums[band.albums].title}</Text>
+                                <Text style={styles.bandInfos}>, {albums[band.albums].date}</Text>   
+                            </View>
+                        </TouchableOpacity>
                         )}
                     </View>
                 ))
@@ -116,6 +125,13 @@ const styles = StyleSheet.create({
     bandInfos: {
         color: 'white',
         fontSize: 16,
+    },
+    bandLinks: {
+        color: 'red',
+        fontSize: 16,
+    },
+    albumLinkContainer: {
+        flexDirection: 'row',
     }
 });
 
