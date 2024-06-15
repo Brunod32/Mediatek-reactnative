@@ -12,10 +12,10 @@ const BandsScreen = () => {
         const fetchData = async () => {
             try {
                 const response = await fetch('https://mediatek-c59c683546ca.herokuapp.com/api/bands');
-                const data = await response.json().then(data => { return data["hydra:member"] });
+                const data = await response.json();
                 const totalItems = data['hydra:totalItems'];
-                setTotalItems(totalItems); 
-                setBands(data);
+                setTotalItems(totalItems);
+                setBands(data['hydra:member']);
                 // console.log(data);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -64,33 +64,33 @@ const BandsScreen = () => {
             };
         
             fetchData();
-        fetchCountries();
-        fetchAlbums();
+            fetchCountries();
+            fetchAlbums();
         }, []);
 
     return (
         <View style={styles.container}>
-        <Text style={styles.title}>Bands {totalItems}:</Text>
-        {bands && bands.length > 0 ? (
-            bands.map((band) => (
-                <>
-                    <View style={styles.bandsView}>
-                        <Text style={styles.bandName} key={band.id}>{band.name}</Text>
-                        <Image source={{ uri: band.picture }} style={{ width: 200, height: 100 }} />
-                        <Text style={[styles.bandInfos, {textTransform: 'capitalize'}]} key={band.id}>{band.kindOfMetal}</Text>
-                        <Text style={styles.bandInfos} key={band.id}>{countries[band.country]}, {band.creationYear}</Text>
-                        <Text style={styles.bandInfos} key={band.id}>Discographie :</Text>
-                        {albums[band.albums] && albums[band.albums].date && (
-                            <Text style={styles.bandInfos} key={band.id}>
-                                {albums[band.albums].title}, {albums[band.albums].date}
-                            </Text>
-                        )}
-                    </View>
-                </>
-            ))
-        ) : (
-            <Text>No bands found</Text>
-        )}
+            <Text style={styles.title}>Bands ({totalItems}):</Text>
+            {bands && bands.length > 0 ? (
+                bands.map((band) => (
+                    <>
+                        <View style={styles.bandsView}>
+                            <Text style={styles.bandName} key={band.id}>{band.name}</Text>
+                            <Image source={{ uri: band.picture }} style={{ width: 200, height: 100 }} />
+                            <Text style={[styles.bandInfos, {textTransform: 'capitalize'}]} key={band.id}>{band.kindOfMetal}</Text>
+                            <Text style={styles.bandInfos} key={band.id}>{countries[band.country]}, {band.creationYear}</Text>
+                            <Text style={styles.bandInfos} key={band.id}>Discographie :</Text>
+                            {albums[band.albums] && albums[band.albums].date && (
+                                <Text style={styles.bandInfos} key={band.id}>
+                                    {albums[band.albums].title}, {albums[band.albums].date}
+                                </Text>
+                            )}
+                        </View>
+                    </>
+                ))
+            ) : (
+                <Text>No bands found</Text>
+            )}
         </View>
     );
 };
