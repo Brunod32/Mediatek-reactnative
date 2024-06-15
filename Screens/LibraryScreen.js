@@ -7,11 +7,11 @@ const BooksScreen = () => {
     const navigation = useNavigation();
 
     const handleAuthorPress = () => {
-        navigation.navigate('AuthorScreen');
+        navigation.navigate('Les auteurs');
     };
 
     const handleBooksPress = () => {
-        navigation.navigate('BooksScreen');
+        navigation.navigate('Les livres');
     };
 
     return (

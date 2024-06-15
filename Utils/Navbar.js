@@ -19,14 +19,14 @@ export default function Navbar() {
             <NavigationContainer>
             <Tab.Navigator>
                 <Tab.Screen
-                    name="Home"
+                    name="Accueil"
                     component={HomeScreen}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
                         <View style={{ paddingTop: 5 }}>
                             <Image
-                            source={require('../assets/img/home.webp')}
-                            style={{ width: size*1.5, height: size*1.5 }}
+                                source={require('../assets/img/home.webp')}
+                                style={{ width: size*1.5, height: size*1.5 }}
                             />
                         </View>
                         ),
@@ -39,8 +39,8 @@ export default function Navbar() {
                         tabBarIcon: ({ focused, color, size }) => (
                         <View style={{ paddingTop: 5 }}>
                             <Image
-                            source={require('../assets/img/metal.png')}
-                            style={{ width: size*1.5, height: size*1.5 }}
+                                source={require('../assets/img/metal.png')}
+                                style={{ width: size*1.5, height: size*1.5 }}
                             />
                         </View>
                         ),
@@ -53,15 +53,15 @@ export default function Navbar() {
                         tabBarIcon: ({ focused, color, size }) => (
                         <View style={{ paddingTop: 5}}>
                             <Image
-                            source={require('../assets/img/book.webp')}
-                            style={{ width: size*1.5, height: size*1.5 }}
+                                source={require('../assets/img/book.webp')}
+                                style={{ width: size*1.5, height: size*1.5 }}
                             />
                         </View>
                         ),
                     }}
                 />
                 <Tab.Screen
-                    name="BandsScreen"
+                    name="Les groupes"
                     component={BandsScreen}
                     options={{
                         tabBarLabel: 'Hidden Screen',
@@ -69,7 +69,7 @@ export default function Navbar() {
                     }}
                 />
                 <Tab.Screen
-                    name="AlbumsScreen"
+                    name="CDthèque"
                     component={AlbumsScreen}
                     options={{
                         tabBarLabel: 'Hidden Screen',
@@ -77,7 +77,7 @@ export default function Navbar() {
                     }}
                 />
                 <Tab.Screen
-                    name="AuthorScreen"
+                    name="Les auteurs"
                     component={AuthorScreen}
                     options={{
                         tabBarLabel: 'Hidden Screen',
@@ -85,7 +85,7 @@ export default function Navbar() {
                     }}
                 />
                 <Tab.Screen
-                    name="BooksScreen"
+                    name="Les livres"
                     component={BooksScreen}
                     options={{
                         tabBarLabel: 'Hidden Screen',

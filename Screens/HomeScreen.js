@@ -17,12 +17,14 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        paddingTop: 50,
         alignItems: 'center',
-        marginTop: 50,
+        backgroundColor: '#3c4043',
     },
     title: {
-        fontSize: 18,
+        fontSize: 24,
         fontWeight: 'bold',
+        color: 'red',
     },
     image: {
       marginTop: 50,

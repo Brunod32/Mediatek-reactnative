@@ -39,14 +39,12 @@ const AlbumsScreen = () => {
             <Text style={styles.title}>Les albums ({totalItems})</Text>
 			{albums && albums.length > 0 ? (
                 albums.map((album) => (
-                    <>
-                        <View style={styles.albumsView}>
-                            <Text style={styles.albumTitle} key={album.id}>{album.title}</Text>
-                            <Image source={{ uri: album.albumCover }} style={{ width: 200, height: 100 }} />
-                            <Text style={[styles.albumInfos]}>{album.releasedYear}</Text>
-                            <Text style={styles.albumInfos}>{bands[album.band]}</Text>
-                        </View>
-                    </>
+                    <View style={styles.albumsView} key={album.id}>
+                        <Text style={styles.albumTitle} >{album.title}</Text>
+                        <Image source={{ uri: album.albumCover }} style={{ width: 200, height: 100 }} />
+                        <Text style={[styles.albumInfos]}>{album.releasedYear}</Text>
+                        <Text style={styles.albumInfos}>{bands[album.band]}</Text>
+                    </View>
                 ))
             ) : (
                 <Text>Pas d'album enregistré</Text>
@@ -59,7 +57,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        marginTop: 50,
         backgroundColor: '#3c4043',
     },
     title: {

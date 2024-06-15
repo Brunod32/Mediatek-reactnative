@@ -16,7 +16,6 @@ const BandsScreen = () => {
                 const totalItems = data['hydra:totalItems'];
                 setTotalItems(totalItems);
                 setBands(data['hydra:member']);
-                // console.log(data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -34,7 +33,6 @@ const BandsScreen = () => {
                         countriesData[country["@id"]] = country.name; // Mappe les pays par URL
                         });
                         setCountries(countriesData);
-                        console.log('Mapped countries:', countriesData);
                     } else {
                         console.error('Error: Unexpected data format');
                     }
@@ -54,7 +52,6 @@ const BandsScreen = () => {
                             albumsData[album["@id"]] = { title: album.title, date: album.releasedYear }; // Permet de récupérer le titre et la date de réalisation de l'album
                         });
                         setAlbums(albumsData);albumsData
-                        console.log('Mapped albums:', albumsData);
                     } else {
                         console.error('Error: Unexpected data format');
                     }
@@ -73,20 +70,18 @@ const BandsScreen = () => {
             <Text style={styles.title}>Bands ({totalItems}):</Text>
             {bands && bands.length > 0 ? (
                 bands.map((band) => (
-                    <>
-                        <View style={styles.bandsView}>
-                            <Text style={styles.bandName} key={band.id}>{band.name}</Text>
-                            <Image source={{ uri: band.picture }} style={{ width: 200, height: 100 }} />
-                            <Text style={[styles.bandInfos, {textTransform: 'capitalize'}]} key={band.id}>{band.kindOfMetal}</Text>
-                            <Text style={styles.bandInfos} key={band.id}>{countries[band.country]}, {band.creationYear}</Text>
-                            <Text style={styles.bandInfos} key={band.id}>Discographie :</Text>
-                            {albums[band.albums] && albums[band.albums].date && (
-                                <Text style={styles.bandInfos} key={band.id}>
-                                    {albums[band.albums].title}, {albums[band.albums].date}
-                                </Text>
-                            )}
-                        </View>
-                    </>
+                    <View style={styles.bandsView} key={band.id}>
+                        <Text style={styles.bandName}>{band.name}</Text>
+                        <Image source={{ uri: band.picture }} style={{ width: 200, height: 100 }} />
+                        <Text style={[styles.bandInfos, {textTransform: 'capitalize'}]}>{band.kindOfMetal}</Text>
+                        <Text style={styles.bandInfos} >{countries[band.country]}, {band.creationYear}</Text>
+                        <Text style={styles.bandInfos}>Discographie :</Text>
+                        {albums[band.albums] && albums[band.albums].date && (
+                            <Text style={styles.bandInfos}>
+                                {albums[band.albums].title}, {albums[band.albums].date}
+                            </Text>
+                        )}
+                    </View>
                 ))
             ) : (
                 <Text>No bands found</Text>

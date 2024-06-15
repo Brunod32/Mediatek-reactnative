@@ -7,11 +7,11 @@ const MusicScreen = () => {
     const navigation = useNavigation();
 
     const handleGuitarPress = () => {
-        navigation.navigate('BandsScreen');
+        navigation.navigate('Les groupes');
     };
 
     const handleAlbumsPress = () => {
-        navigation.navigate('AlbumsScreen');
+        navigation.navigate('CDthèque');
     };
 
     return (
