@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Text, View, Image, TouchableOpacity } from 'react-native';
+import { Text, View, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { StyleSheet} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -8,10 +8,12 @@ const BooksScreen = () => {
 	const [totalItems, setTotalItems] = useState(0);
 	const [authors, setAuthors] = useState({});
 	const navigation = useNavigation();
+	const [isLoading, setIsLoading] = useState(true);
 
 useEffect(() => {
 	const fetchDataBooks = async () => {
 		try {
+			setIsLoading(true);
 			const response = await fetch('https://mediatek-c59c683546ca.herokuapp.com/api/books');
 			const data = await response.json();
 			const totalItems = data['hydra:totalItems'];
@@ -29,9 +31,10 @@ useEffect(() => {
 			console.log('Authors Map:', authorsMap)
 			console.log('Books Data:', data['hydra:member']);
 		} catch (error) {
-		console.error('Error fetching books:', error);
+			console.error('Error fetching books:', error);
 		}
-    	};
+		setIsLoading(false);
+    };
           
       	fetchDataBooks();
 	}, [])
@@ -43,25 +46,32 @@ useEffect(() => {
 
 	  return (
 		<View style={styles.container}>
-		  <Text style={styles.title}>Les Livres ({totalItems})</Text>
-		  {books && books.length > 0 ? (
-			books.map((book) => (
-				<View style={styles.booksView} key={book.id}>
-					<Text style={styles.bookTitle}>{book.title}</Text>
-					<Image source={{ uri: book.bookCover }} style={styles.image} />
-					<Text style={styles.bookInfos}>Année de publication: {book.releasedYear}</Text>
-					{/* Affichage de l'auteur */}
-					<TouchableOpacity onPress={() => handleBandPress(book.writer)}>
-						<View style={styles.auhtorLinkContainer}>
-							<Text style={styles.bookInfos}>Auteur: </Text>
-							<Text style={styles.bookLinks}>{authors[book.writer]}</Text>
-						</View>
-					</TouchableOpacity>
-				</View>
-			))
-		  ) : (
-			<Text>Pas de livre enregistré</Text>
-		  )}
+		  	<Text style={styles.title}>Les Livres ({totalItems})</Text>
+			{isLoading ? (
+				<ActivityIndicator size="large" color="red" />
+			) : (
+				<>
+			
+					{books && books.length > 0 ? (
+						books.map((book) => (
+							<View style={styles.booksView} key={book.id}>
+								<Text style={styles.bookTitle}>{book.title}</Text>
+								<Image source={{ uri: book.bookCover }} style={styles.image} />
+								<Text style={styles.bookInfos}>Année de publication: {book.releasedYear}</Text>
+								{/* Affichage de l'auteur */}
+								<TouchableOpacity onPress={() => handleBandPress(book.writer)}>
+									<View style={styles.auhtorLinkContainer}>
+										<Text style={styles.bookInfos}>Auteur: </Text>
+										<Text style={styles.bookLinks}>{authors[book.writer]}</Text>
+									</View>
+								</TouchableOpacity>
+							</View>
+						))
+					) : (
+						<Text>Pas de livre enregistré</Text>
+					)}
+				</>
+			)}
 		</View>
 	  );
 };

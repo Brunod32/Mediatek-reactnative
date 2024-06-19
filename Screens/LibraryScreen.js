@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 36,
         fontWeight: 'bold',
+        color: 'red'
     },
     imageWriter: {
         height: 200,

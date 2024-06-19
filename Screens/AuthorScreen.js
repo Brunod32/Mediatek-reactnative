@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Image, Text, View, TouchableOpacity } from 'react-native';
+import { Image, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -9,10 +9,12 @@ const AuthorScreen = () => {
 	const [countries, setCountries] = useState({});
 	const [totalItems, setTotalItems] = useState(0);
 	const navigation = useNavigation();
+    const [isLoading, setIsLoading] = useState(true);
 
 useEffect(() => {
 		const fetchDataAuthors = async () => {
 			try {
+				setIsLoading(true);
 				const response = await fetch('https://mediatek-c59c683546ca.herokuapp.com/api/writers');
 				const data = await response.json();
 				const totalItems = data['hydra:totalItems'];
@@ -35,6 +37,8 @@ useEffect(() => {
 					return acc;
 				}, {});
 				setCountries(CountriesMap);
+
+				setIsLoading(false);
 			} catch (error) {
 				console.error('Error fetching authors:', error);
 			}
@@ -50,25 +54,31 @@ useEffect(() => {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.name}>Les auteurs ({totalItems})</Text>
-			{authors && authors.length > 0 ? (
-				authors.map((author) => (
-					<View style={styles.authorsView} key={author.id}>
-						<Text style={styles.authorTitle} >{author.firstname} {author.lastname}</Text>
-						<Image source={{ uri: author.picture }} style={styles.image} />
-						<Text style={styles.authorInfos}>{countries[author.country]}</Text>
-						<Text style={styles.authorInfos}>Bibliographie :</Text>
-						{books[author.books] && books[author.books].date && (
-                        <TouchableOpacity onPress={() => handleBookPress(author.books)}>
-                            <View style={styles.bookLinkContainer}>
-                                <Text style={styles.authorLinks}>{books[author.books].title}</Text>
-                                <Text style={styles.authorInfos}> , {books[author.books].date}</Text>   
-                            </View>
-                        </TouchableOpacity>
-                        )}
-					</View>
-				))
+			{isLoading ? (
+				<ActivityIndicator size="large" color="red" />
 			) : (
-				<Text>Pas d'auteur enregistré</Text>
+				<>
+					{authors && authors.length > 0 ? (
+						authors.map((author) => (
+							<View style={styles.authorsView} key={author.id}>
+								<Text style={styles.authorTitle} >{author.firstname} {author.lastname}</Text>
+								<Image source={{ uri: author.picture }} style={styles.image} />
+								<Text style={styles.authorInfos}>{countries[author.country]}</Text>
+								<Text style={styles.authorInfos}>Bibliographie :</Text>
+								{books[author.books] && books[author.books].date && (
+									<TouchableOpacity onPress={() => handleBookPress(author.books)}>
+										<View style={styles.bookLinkContainer}>
+											<Text style={styles.authorLinks}>{books[author.books].title}</Text>
+											<Text style={styles.authorInfos}> , {books[author.books].date}</Text>
+										</View>
+									</TouchableOpacity>
+								)}
+							</View>
+						))
+					) : (
+						<Text>Pas d'auteur enregistré</Text>
+					)}
+				</>
 			)}
 		</View>
 	)

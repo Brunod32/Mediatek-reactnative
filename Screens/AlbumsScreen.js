@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Image , Text, View, TouchableOpacity } from 'react-native';
+import { Image , Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -8,10 +8,12 @@ const AlbumsScreen = () => {
     const [totalItems, setTotalItems] = useState(0);
     const [bands, setBands] = useState({});
     const navigation = useNavigation();
+    const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
         const fetchDataAlbums = async () => {
             try {
+                setIsLoading(true);
 				const response = await fetch('https://mediatek-c59c683546ca.herokuapp.com/api/albums');
                 const data = await response.json();
                 const totalItems = data['hydra:totalItems'];
@@ -27,7 +29,7 @@ const AlbumsScreen = () => {
                 }, {});
                 setBands(bandsMap);
 
-				
+				setIsLoading(false);
 			} catch (error) {
 			  console.error('Error fetching albums:', error);
 			}
@@ -43,19 +45,25 @@ const AlbumsScreen = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Les albums ({totalItems})</Text>
-			{albums && albums.length > 0 ? (
-                albums.map((album) => (
-                    <View style={styles.albumsView} key={album.id}>
-                        <Text style={styles.albumTitle} >{album.title}</Text>
-                        <Image source={{ uri: album.albumCover }} style={styles.image} />
-                        <Text style={[styles.albumInfos]}>{album.releasedYear}</Text>
-                        <TouchableOpacity onPress={() => handleBandPress(album.band)}>
-                            <Text style={styles.albumLinks}>{bands[album.band]}</Text>
-                        </TouchableOpacity>
-                    </View>
-                ))
+            {isLoading ? (
+                <ActivityIndicator size="large" color="#red" />
             ) : (
-                <Text>Pas d'album enregistré</Text>
+                <>
+                    {albums && albums.length > 0 ? (
+                        albums.map((album) => (
+                            <View style={styles.albumsView} key={album.id}>
+                                <Text style={styles.albumTitle} >{album.title}</Text>
+                                <Image source={{ uri: album.albumCover }} style={styles.image} />
+                                <Text style={[styles.albumInfos]}>{album.releasedYear}</Text>
+                                <TouchableOpacity onPress={() => handleBandPress(album.band)}>
+                                    <Text style={styles.albumLinks}>{bands[album.band]}</Text>
+                                </TouchableOpacity>
+                            </View>
+                        ))
+                    ) : (
+                        <Text>Pas d'album enregistré</Text>
+                    )}
+                </>
             )}
         </View>
     )
