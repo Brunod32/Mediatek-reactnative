@@ -28,8 +28,6 @@ useEffect(() => {
 				return acc;
 			}, {});
 			setAuthors(authorsMap);
-			console.log('Authors Map:', authorsMap)
-			console.log('Books Data:', data['hydra:member']);
 		} catch (error) {
 			console.error('Error fetching books:', error);
 		}
